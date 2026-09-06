@@ -1,73 +1,83 @@
-# React + TypeScript + Vite
+# Kanban Board
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack Kanban task board built with React, TypeScript, and Supabase. Tasks persist in Supabase and can be moved between workflow stages with drag-and-drop.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Four workflow columns: To Do, In Progress, In Review, and Done
+- Drag-and-drop task movement with persisted status updates
+- Add tasks with a title, description, priority, and due date
+- Search tasks by title
+- Filter by priority
+- Overdue and due-soon indicators
+- Live summary counts for total, completed, and overdue tasks
+- Anonymous Supabase authentication with persistent sessions
+- Delete tasks directly from the board
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19
+- TypeScript
+- Vite
+- Supabase
+- `@hello-pangea/dnd`
+- Lucide React
 
-## Expanding the ESLint configuration
+## How It Works
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The frontend signs users in anonymously through Supabase, then loads task records from the `tasks` table. Dragging a task to a new column updates its `status` both in the UI and in Supabase. New tasks are inserted with the authenticated user's ID, while search and priority filtering are handled client-side.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Task statuses used by the application:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+todo
+in_progress
+in_review
+done
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Task priorities:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+low
+normal
+high
 ```
+
+## Run Locally
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Create a `.env` file with your Supabase project values:
+
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+Then start the development server:
+
+```bash
+npm run dev
+```
+
+## Project Structure
+
+```text
+src/
+├── components/
+│   ├── AddTaskModal.tsx
+│   ├── Board.tsx
+│   └── TaskCard.tsx
+├── App.tsx
+├── main.tsx
+└── supabase.ts
+```
+
+## Live App
+
+A deployed version is available from the repository homepage.
